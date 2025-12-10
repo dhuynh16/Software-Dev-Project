@@ -6,6 +6,13 @@
             "name": "Main",
             "request": "launch",
             "mainClass": "com.companyz.ems.ui.Main",
+            "projectName": "Software-Dev-Project_8bf8b542"
+        },
+        {
+            "type": "java",
+            "name": "Main",
+            "request": "launch",
+            "mainClass": "com.companyz.ems.ui.Main",
             "projectName": "EmployeeManagement System_581dc104"
         },
         {

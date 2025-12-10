@@ -86,7 +86,7 @@ public class ConsoleMenu {
             System.out.println("2. Add Employee");
             System.out.println("3. Update Salary Range");
             System.out.println("4. Create Pay Statement");
-            System.out.println(x: "5. Create New Employee");
+            System.out.println("5. Create New Employee");
             System.out.println("6. Logout");
 
             System.out.print("Choose option: ");
