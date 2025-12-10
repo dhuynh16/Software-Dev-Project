@@ -1,0 +1,32 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Main",
+            "request": "launch",
+            "mainClass": "com.companyz.ems.ui.Main",
+            "projectName": "EmployeeManagement System_581dc104"
+        },
+        {
+            "type": "java",
+            "name": "App",
+            "request": "launch",
+            "mainClass": "App",
+            "projectName": "EmployeeManagement System_581dc104"
+        },
+        {
+            "type": "java",
+            "name": "Main",
+            "request": "launch",
+            "mainClass": "Main",
+            "projectName": "EmployeeManagement System_581dc104"
+        },
+        {
+            "type": "java",
+            "name": "Launch EMS App",
+            "request": "launch",
+            "mainClass": "com.companyz.ems.App"
+        }
+    ]
+}
