@@ -26,19 +26,22 @@ public class PayrollService {
 
     // 6b, 6c: HR reports
     public List<String> totalPayByJobTitle(Session session, int year, int month) {
-        requireHR(session);
+        requireHR(session);  // 👈 this is a private method in this class
         return payrollDAO.totalPayByJobTitleForMonth(year, month);
     }
+    
+    private void requireHR(Session session) {
+        if (session == null || session.getRole() != UserRole.HR_ADMIN) {
+            throw new SecurityException("HR admin only");
+        }
+    }
+    
+
 
     public List<String> totalPayByDivision(Session session, int year, int month) {
         requireHR(session);
         return payrollDAO.totalPayByDivisionForMonth(year, month);
     }
 
-    private void requireHR(Session session) {
-        if (session == null || session.getRole() != UserRole.HR_ADMIN) {
-            throw new SecurityException("HR admin only");
-        }
-    }
 }
 

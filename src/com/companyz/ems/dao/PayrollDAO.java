@@ -43,34 +43,43 @@ public class PayrollDAO {
         return list;
     }
 
+    
     // 6b: total pay for month by job title
-    public List<String> totalPayByJobTitleForMonth(int year, int month) {
-        String sql = """
-            SELECT e.job_title,
-                   SUM(p.net_pay) AS total_net
-            FROM payroll p
-            JOIN employees e ON p.empid = e.empid
-            WHERE YEAR(p.pay_date) = ? AND MONTH(p.pay_date) = ?
-            GROUP BY e.job_title
-            ORDER BY total_net DESC
-            """;
-        List<String> rows = new ArrayList<>();
-        try (Connection conn = cm.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setInt(1, year);
-            ps.setInt(2, month);
-            try (ResultSet rs = ps.executeQuery()) {
-                while (rs.next()) {
-                    String jobTitle = rs.getString("job_title");
-                    double total = rs.getDouble("total_net");
-                    rows.add(jobTitle + " : " + total);
-                }
+public List<String> totalPayByJobTitleForMonth(int year, int month) {
+    String sql = """
+        SELECT e.job_title,
+               SUM(p.net_pay) AS total_net
+        FROM payroll p
+        JOIN employees e ON p.empid = e.empid
+        WHERE YEAR(p.pay_date) = ? AND MONTH(p.pay_date) = ?
+        GROUP BY e.job_title
+        ORDER BY total_net DESC
+        """;
+
+    List<String> rows = new ArrayList<>();
+
+    try (Connection conn = cm.getConnection();
+         PreparedStatement ps = conn.prepareStatement(sql)) {
+
+        ps.setInt(1, year);
+        ps.setInt(2, month);
+
+        try (ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                String jobTitle = rs.getString("job_title");
+                double total = rs.getDouble("total_net");
+                // simple text row, e.g. "Software Engineer|128450.0"
+                rows.add(jobTitle + "|" + total);
             }
-        } catch (SQLException e) {
-            throw new RuntimeException("Error fetching total pay by job title", e);
         }
-        return rows;
+    } catch (SQLException e) {
+        throw new RuntimeException("Error fetching total pay by job title", e);
     }
+
+    return rows;
+}
+
+    
 
     // 6c: total pay for month by division
     public List<String> totalPayByDivisionForMonth(int year, int month) {

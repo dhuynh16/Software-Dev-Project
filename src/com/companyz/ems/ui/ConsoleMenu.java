@@ -86,7 +86,8 @@ public class ConsoleMenu {
             System.out.println("2. Add Employee");
             System.out.println("3. Update Salary Range");
             System.out.println("4. Create Pay Statement");
-            System.out.println("5. Logout");
+            System.out.println(x: "5. Create New Employee");
+            System.out.println("6. Logout");
 
             System.out.print("Choose option: ");
             int choice = scanner.nextInt();
@@ -98,7 +99,8 @@ public class ConsoleMenu {
                 case 2 -> addEmployee();
                 case 3 -> updateSalaryRange();
                 case 4 -> createPayStatement();
-                case 5 -> {
+                case 5 -> createEmployeeMenu(session);
+                case 6 -> {
                     return;
                 }
 

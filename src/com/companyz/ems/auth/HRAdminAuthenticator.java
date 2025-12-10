@@ -3,7 +3,6 @@ package com.companyz.ems.auth;
 import com.companyz.ems.dao.ConnectionManager;
 import com.companyz.ems.security.UserRole;
 import com.companyz.ems.user.HREmployee;
-
 import java.sql.*;
 
 public class HRAdminAuthenticator implements Authenticator {

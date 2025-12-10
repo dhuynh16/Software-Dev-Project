@@ -14,6 +14,39 @@ public class EmployeeDAO {
         this.cm = cm;
     }
 
+    // ========== CREATE NEW EMPLOYEE ==========
+
+    public void createEmployee(Employee e) {
+        String sql = """
+            INSERT INTO employees
+            (empid, fname, lname, dob, ssn, hire_date, base_salary,
+             email, division, job_title, status)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            """;
+
+        try (Connection conn = cm.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, e.getEmpid());
+            ps.setString(2, e.getFname());
+            ps.setString(3, e.getLname());
+            ps.setDate(4, e.getDob() != null ? Date.valueOf(e.getDob()) : null);
+            ps.setString(5, e.getSsn());
+            ps.setDate(6, e.getHireDate() != null ? Date.valueOf(e.getHireDate()) : null);
+            ps.setDouble(7, e.getSalary());
+            ps.setString(8, e.getEmail());
+            ps.setString(9, e.getDivision());
+            ps.setString(10, e.getJobTitle());
+            ps.setString(11, e.getStatus());
+
+            ps.executeUpdate();
+        } catch (SQLException ex) {
+            throw new RuntimeException("Error creating employee", ex);
+        }
+    }
+
+    // ========== FIND BY EMPID ==========
+
     public Employee findByEmpid(int empid) {
         String sql = """
             SELECT empid, fname, lname, dob, ssn, hire_date,
@@ -32,6 +65,8 @@ public class EmployeeDAO {
             throw new RuntimeException("Error finding employee by id", e);
         }
     }
+
+    // ========== SEARCH ==========
 
     public List<Employee> search(String name, LocalDate dob, String ssn, Integer empid) {
         StringBuilder sb = new StringBuilder("""
@@ -76,6 +111,8 @@ public class EmployeeDAO {
         return list;
     }
 
+    // ========== UPDATE EMPLOYEE DETAILS ==========
+
     public void updateEmployee(Employee e) {
         String sql = """
             UPDATE employees
@@ -96,6 +133,8 @@ public class EmployeeDAO {
         }
     }
 
+    // ========== UPDATE SALARY RANGE ==========
+
     public int updateSalaryRange(double min, double max, double percent) {
         String sql = """
             UPDATE employees
@@ -113,15 +152,16 @@ public class EmployeeDAO {
         }
     }
 
+    // ========== HIRED BETWEEN REPORT ==========
+
     public List<Employee> hiredBetween(LocalDate from, LocalDate to) {
         String sql = """
-    SELECT empid, fname, lname, dob, ssn, hire_date,
-           base_salary, email, division, job_title, status
-    FROM employees
-    WHERE 1=1
-    ...
-""";
-
+            SELECT empid, fname, lname, dob, ssn, hire_date,
+                   base_salary, email, division, job_title, status
+            FROM employees
+            WHERE hire_date BETWEEN ? AND ?
+            ORDER BY hire_date
+            """;
         List<Employee> list = new ArrayList<>();
         try (Connection conn = cm.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -138,25 +178,28 @@ public class EmployeeDAO {
         return list;
     }
 
+    // ========== ROW MAPPER ==========
+
     private Employee mapRow(ResultSet rs) throws SQLException {
         int empid = rs.getInt("empid");
         String fname = rs.getString("fname");
         String lname = rs.getString("lname");
-        java.sql.Date dobSql = rs.getDate("dob");
+        Date dobSql = rs.getDate("dob");
         LocalDate dob = dobSql != null ? dobSql.toLocalDate() : null;
         String ssn = rs.getString("ssn");
-        java.sql.Date hireSql = rs.getDate("hire_date");
+        Date hireSql = rs.getDate("hire_date");
         LocalDate hire = hireSql != null ? hireSql.toLocalDate() : null;
         double salary = rs.getDouble("base_salary");
         String email = rs.getString("email");
         String division = rs.getString("division");
         String jobTitle = rs.getString("job_title");
         String status = rs.getString("status");
-    
+
         return new Employee(empid, fname, lname, dob, ssn,
                             hire, salary, email, division, jobTitle, status);
     }
 }
+
     
 
 

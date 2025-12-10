@@ -24,19 +24,23 @@ public class EmployeeService {
     }
 
     // Feature 3 (search for viewing, employee only)
-    public List<Employee> searchForEmployee(Session session,
-                                            String name, LocalDate dob,
-                                            String ssn, Integer empid) {
-        requireEmployee(session);
+    // EmployeeService.java
 
-        Integer myEmpid = session.getUser().getEmpid();
-        List<Employee> results = employeeDAO.search(name, dob, ssn, empid);
+public List<Employee> searchForEmployee(Session session,
+String name,
+LocalDate dob,
+String ssn,
+Integer empid) {
+// Only general employees use this function
+if (session == null || session.getRole() != UserRole.GENERAL_EMPLOYEE) {
+throw new SecurityException("General employee only");
+}
 
-        // Only allow their own record
-        return results.stream()
-                .filter(e -> e.getEmpid() == myEmpid)
-                .toList();
-    }
+// 🔓 ALLOW searching anyone:
+// Use exactly what they typed as filters, do NOT force session.getEmpid()
+return employeeDAO.search(name, dob, ssn, empid);
+}
+
 
     // Feature 4 (update employee data, HR only)
     public void updateEmployee(Session session, Employee e) {
@@ -70,5 +74,9 @@ public class EmployeeService {
             throw new SecurityException("General employee only");
         }
     }
-}
+    public void createEmployee(Session session, Employee e) {
+        requireHR(session);
+        employeeDAO.createEmployee(e);
+    }
+}    
 

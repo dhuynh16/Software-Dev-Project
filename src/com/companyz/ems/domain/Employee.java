@@ -7,8 +7,8 @@ public class Employee {
     private int empid;
     private String fname;
     private String lname;
-    private LocalDate dob;      // 👈 make sure this exists
-    private String ssn;         // 👈 and this
+    private LocalDate dob;
+    private String ssn;
     private LocalDate hireDate;
     private double salary;
     private String email;
@@ -41,9 +41,12 @@ public class Employee {
     }
 
     public int getEmpid() { return empid; }
+    public String getFname() { return fname; }      // 👈 needed
+    public String getLname() { return lname; }      // 👈 needed
     public String getFullName() { return fname + " " + lname; }
-    public LocalDate getDob() { return dob; }      // 👈 getter
-    public String getSsn() { return ssn; }         // 👈 getter
+
+    public LocalDate getDob() { return dob; }
+    public String getSsn() { return ssn; }
     public LocalDate getHireDate() { return hireDate; }
     public double getSalary() { return salary; }
     public String getEmail() { return email; }
@@ -57,6 +60,7 @@ public class Employee {
     public void setStatus(String status) { this.status = status; }
     public void setSalary(double salary) { this.salary = salary; }
 }
+
 
 
 
